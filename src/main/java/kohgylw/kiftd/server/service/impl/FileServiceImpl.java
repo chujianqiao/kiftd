@@ -39,11 +39,14 @@ public class FileServiceImpl extends RangeFileStreamWriter implements FileServic
 	private static final String NO_AUTHORIZED = "noAuthorized";// 权限错误标识
 	private static final String UPLOADSUCCESS = "uploadsuccess";// 上传成功标识
 	private static final String UPLOADERROR = "uploaderror";// 上传失败标识
+	private static final String UPLOADSIZEERROR = "uploadsizeerror";// 上传大小超过空间失败标识
 
 	private static Map<String, UploadKeyCertificate> keyEffecMap = new HashMap<>();// 上传次数凭证表，用于记录用次数有限但时间不限的上传凭证
 
 	@Resource
 	private NodeMapper fm;
+	@Resource
+	private UsersMapper um;
 	@Resource
 	private FolderMapper flm;
 	@Resource
@@ -144,6 +147,7 @@ public class FileServiceImpl extends RangeFileStreamWriter implements FileServic
 	// 执行上传操作，接收文件并存入文件节点
 	public String doUploadFile(final HttpServletRequest request, final HttpServletResponse response,
 			final MultipartFile file) {
+		Users users = (Users) request.getSession().getAttribute("users");
 		String account = (String) request.getSession().getAttribute("ACCOUNT");
 		final String folderId = request.getParameter("folderId");
 		final String originalFileName = new String(file.getOriginalFilename().getBytes(Charset.forName("UTF-8")),
@@ -204,12 +208,22 @@ public class FileServiceImpl extends RangeFileStreamWriter implements FileServic
 								} else {
 									f.setFileCreator("\u533f\u540d\u7528\u6237");
 								}
-								if (fm.update(f) > 0) {
-									this.lu.writeUploadFileEvent(f, account);
-									return UPLOADSUCCESS;
+								// TODO 覆盖文件 判断个人空间是否超过固定大小  这里还有问题
+
+
+								if (Integer.parseInt(users.getFILESIZE()) + Integer.parseInt(fbu.getFileSize(file))>Integer.parseInt(users.getMAXSIZE())){
+									return UPLOADSIZEERROR;
 								} else {
-									return UPLOADERROR;
+									String fileSize = Integer.parseInt(users.getFILESIZE()) + Integer.parseInt(fbu.getFileSize(file)) + "";
+									if (fm.update(f) > 0 && um.updateSizeByUsername(fileSize, users.getUSERNAME()) > 0) {
+										this.lu.writeUploadFileEvent(f, account);
+										return UPLOADSUCCESS;
+									} else {
+										return UPLOADERROR;
+									}
 								}
+
+
 							} catch (Exception e) {
 								// TODO 自动生成的 catch 块
 								return UPLOADERROR;
@@ -253,9 +267,15 @@ public class FileServiceImpl extends RangeFileStreamWriter implements FileServic
 		// 尽可能避免UUID重复的情况发生，重试10次
 		while (true) {
 			try {
-				if (this.fm.insert(f2) > 0) {
-					this.lu.writeUploadFileEvent(f2, account);
-					return UPLOADSUCCESS;
+				if (Integer.parseInt(users.getFILESIZE()) + Integer.parseInt(fbu.getFileSize(file))>Integer.parseInt(users.getMAXSIZE())){
+					return UPLOADSIZEERROR;
+				} else {
+					String fileSize = Integer.parseInt(users.getFILESIZE()) + Integer.parseInt(fbu.getFileSize(file)) + "";
+					if (this.fm.insert(f2) > 0 && um.updateSizeByUsername(fileSize, users.getUSERNAME()) > 0) {
+						this.lu.writeUploadFileEvent(f2, account);
+						users.setFILESIZE(fileSize);
+						return UPLOADSUCCESS;
+					}
 				}
 				break;
 			} catch (Exception e) {
@@ -272,6 +292,7 @@ public class FileServiceImpl extends RangeFileStreamWriter implements FileServic
 	// 删除单个文件，该功能与删除多个文件重复，计划合并二者
 	public String deleteFile(final HttpServletRequest request) {
 		// 接收参数并接续要删除的文件
+		Users users = (Users) request.getSession().getAttribute("users");
 		final String fileId = request.getParameter("fileId");
 		final String account = (String) request.getSession().getAttribute("ACCOUNT");
 		if (!ConfigureReader.instance().authorized(account, AccountAuth.DELETE_FILE_OR_FOLDER)) {
@@ -290,8 +311,11 @@ public class FileServiceImpl extends RangeFileStreamWriter implements FileServic
 			return "cannotDeleteFile";
 		}
 		// 从节点删除
-		if (this.fm.deleteById(fileId) > 0) {
+		String fileSize = Integer.parseInt(users.getFILESIZE()) - Integer.parseInt(file.getFileSize()) + "";
+
+		if (this.fm.deleteById(fileId) > 0 && um.updateSizeByUsername(fileSize, users.getUSERNAME()) > 0) {
 			this.lu.writeDeleteFileEvent(request, file);
+			users.setFILESIZE(fileSize);
 			return "deleteFileSuccess";
 		}
 		return "cannotDeleteFile";

@@ -54,7 +54,7 @@ public class DataAccess
     static {
         final String mybatisResourceFolder = ConfigureReader.instance().getPath() + File.separator + "mybatisResource" + File.separator;
         final String mapperFilesFolder = mybatisResourceFolder + "mapperXML" + File.separator;
-        DataAccess.mapperFiles = new Resource[] { new FileSystemResource(mapperFilesFolder + "NodeMapper.xml"), new FileSystemResource(mapperFilesFolder + "FolderMapper.xml") };
+        DataAccess.mapperFiles = new Resource[] { new FileSystemResource(mapperFilesFolder + "NodeMapper.xml"), new FileSystemResource(mapperFilesFolder + "FolderMapper.xml"), new FileSystemResource(mapperFilesFolder + "UsersMapper.xml") };
         DataAccess.mybatisConfg = (Resource)new FileSystemResource(mybatisResourceFolder + "mybatis.xml");
     }
 }

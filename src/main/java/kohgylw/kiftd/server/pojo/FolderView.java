@@ -10,6 +10,7 @@ public class FolderView{
     private List<Folder> folderList;
     private List<Node> fileList;
     private String account;
+    private Users users;
     private List<String> authList;
     private String publishTime;
     
@@ -67,5 +68,13 @@ public class FolderView{
     
     public void setPublishTime(final String publishTime) {
         this.publishTime = publishTime;
+    }
+
+    public Users getUsers() {
+        return users;
+    }
+
+    public void setUsers(Users users) {
+        this.users = users;
     }
 }

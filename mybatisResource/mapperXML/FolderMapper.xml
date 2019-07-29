@@ -21,6 +21,15 @@
 		SELECT * FROM FOLDER WHERE folder_parent = #{pid,jdbcType=VARCHAR}
 	</select>
 
+	<select id="queryByAccount" parameterType="java.lang.String"
+			resultMap="BaseResultMap">
+		SELECT * FROM FOLDER WHERE folder_parent = #{fid,jdbcType=VARCHAR} AND folder_creator = #{account,jdbcType=VARCHAR}
+	</select>
+
+	<select id="queryByParentIdNOShare" resultMap="BaseResultMap">
+		SELECT * FROM FOLDER WHERE folder_parent = #{fid,jdbcType=VARCHAR} AND folder_constraint = #{typeid,jdbcType=INTEGER}
+	</select>
+
 	<select id="queryByParentIdAndFolderName" parameterType="java.util.Map"
 		resultMap="BaseResultMap">
 		SELECT * FROM FOLDER WHERE folder_parent = #{parentId,jdbcType=VARCHAR} AND

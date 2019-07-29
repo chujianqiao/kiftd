@@ -55,12 +55,6 @@
 						刷新 <span class="glyphicon glyphicon-repeat" aria-hidden="true"></span>
 					</button>
 				</p>
-				<p class="subtitle">
-					文件同步时间：<span id="publishTime"></span>
-				</p>
-				<p class="subtitle">
-					OS：<span id="serverOS"><span class="graytext">加载中...</span></span>
-				</p>
 				<div id="filetable" class="panel panel-default" unselectable="on"
 					onselectstart="return false;" style="-moz-user-select: none;">
 					<!-- 文件列表头部，也就是操作栏 -->
@@ -90,6 +84,11 @@
 									<button type="button" class="btn btn-default"
 										onclick="doSearchFile()">搜索</button>
 								</form>
+								<a id="myFiles" href="javascript:0;" onclick="showFolderView('root','1','0')"
+								   data-toggle="modal" class="navbar-text">我的文件</a>
+									<a id="shareFiles" href="javascript:0;" onclick="showFolderView('root','0','0')"
+									   data-toggle="modal" class="navbar-text">共享文件</a>
+
 								<ul class="nav navbar-nav navbar-right">
 									<li id="packageDownloadBox"></li>
 									<li class="dropdown" id="operationMenuBox"
@@ -130,6 +129,8 @@
 									aria-hidden="true" style="float: right"></span></th>
 								<th class="hiddenColumn" onclick="sortbycn()">创建者<span
 									id="sortByCN" aria-hidden="true" style="float: right"></span></th>
+								<th class="hiddenColumn" onclick="sortbycn()">密级<span
+										id="sortByMi" aria-hidden="true" style="float: right"></span></th>
 								<th onclick="showOriginFolderView()">操作</th>
 							</tr>
 						</thead>
@@ -663,5 +664,5 @@
 <!-- 音乐播放器 -->
 <script type="text/javascript" src="js/APlayer.min.js"></script>
 <!-- 页面操作定义 -->
-<script type="text/javascript" src="js/home.min.js"></script>
+<script type="text/javascript" src="js/home.js"></script>
 </html>

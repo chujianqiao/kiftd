@@ -1,0 +1,19 @@
+TIME:
+2019年07月24日 16:54:19
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Upload file]
+>PATH [ROOT/111]
+>NAME [apache-maven-3.6.0-bin.zip]
+
+TIME:
+2019年07月24日 16:56:31
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Delete file]
+>PATH [ROOT/111]
+>NAME [DownLoadRecord (2).ini]

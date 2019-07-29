@@ -1,0 +1,107 @@
+TIME:
+2019年07月18日 11:19:07
+TYPE:
+Exception
+CONTENT:
+[java.lang.NullPointerException]:null
+
+TIME:
+2019年07月18日 11:19:13
+TYPE:
+Exception
+CONTENT:
+[java.lang.NullPointerException]:null
+
+TIME:
+2019年07月18日 11:19:17
+TYPE:
+Exception
+CONTENT:
+[java.lang.NullPointerException]:null
+
+TIME:
+2019年07月18日 13:58:16
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Create new folder]
+>PATH [ROOT/]
+>NAME [aaa]，CONSTRAINT [0]
+
+TIME:
+2019年07月18日 13:58:55
+TYPE:
+Exception
+CONTENT:
+[org.springframework.web.multipart.MultipartException: Failed to parse multipart servlet request; nested exception is java.io.IOException: org.apache.tomcat.util.http.fileupload.FileUploadBase$IOFileUploadException: Processing of multipart/form-data request failed. Unexpected EOF read on the socket]:Failed to parse multipart servlet request; nested exception is java.io.IOException: org.apache.tomcat.util.http.fileupload.FileUploadBase$IOFileUploadException: Processing of multipart/form-data request failed. Unexpected EOF read on the socket
+
+TIME:
+2019年07月18日 13:59:04
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Upload file]
+>PATH [ROOT/aaa]
+>NAME [DownLoadRecord.ini]
+
+TIME:
+2019年07月18日 14:09:12
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Share Download file URL]
+>PATH [ROOT/aaa]
+>NAME [DownLoadRecord.ini]
+
+TIME:
+2019年07月18日 14:09:18
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Share Download file URL]
+>PATH [ROOT/aaa]
+>NAME [DownLoadRecord.ini]
+
+TIME:
+2019年07月18日 14:11:30
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Share Download file URL]
+>PATH [ROOT/aaa]
+>NAME [DownLoadRecord.ini]
+
+TIME:
+2019年07月18日 14:16:54
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Create new folder]
+>PATH [ROOT/]
+>NAME [阿斯顿]，CONSTRAINT [0]
+
+TIME:
+2019年07月18日 17:32:50
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Edit folder]
+>PATH [ROOT/]
+>NAME [aaa]->[aaa]，CONSTRAINT [0]->[2]
+
+TIME:
+2019年07月18日 17:32:54
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Edit folder]
+>PATH [ROOT/]
+>NAME [阿斯顿]->[阿斯顿]，CONSTRAINT [0]->[2]

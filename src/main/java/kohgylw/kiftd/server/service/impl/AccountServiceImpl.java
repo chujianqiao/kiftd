@@ -1,5 +1,7 @@
 package kohgylw.kiftd.server.service.impl;
 
+import kohgylw.kiftd.server.mapper.UsersMapper;
+import kohgylw.kiftd.server.model.Users;
 import kohgylw.kiftd.server.service.*;
 import org.springframework.stereotype.*;
 
@@ -20,6 +22,8 @@ import kohgylw.kiftd.server.pojo.*;
 public class AccountServiceImpl implements AccountService {
 	@Resource
 	private KeyUtil ku;
+	@Resource
+	private UsersMapper um;
 
 	// 登录密钥有效期
 	private static final long TIME_OUT = 30000L;
@@ -60,7 +64,15 @@ public class AccountServiceImpl implements AccountService {
 	public String checkLoginRequest(final HttpServletRequest request, final HttpSession session) {
 		final String encrypted = request.getParameter("encrypted");
 		final String loginInfoStr = DecryptionUtil.dncryption(encrypted, ku.getPrivateKey());
-		try {
+		final LoginInfoPojo info = gson.fromJson(loginInfoStr, LoginInfoPojo.class);
+		final String accountId = info.getAccountId();
+		Users users = um.queryByUsername(accountId);
+		if (users != null){
+			session.setAttribute("users", users);
+		}
+		session.setAttribute("ACCOUNT", (Object) accountId);
+		return "permitlogin";
+		/*try {
 			final LoginInfoPojo info = gson.fromJson(loginInfoStr, LoginInfoPojo.class);
 			if (System.currentTimeMillis() - Long.parseLong(info.getTime()) > TIME_OUT) {
 				return "error";
@@ -101,7 +113,7 @@ public class AccountServiceImpl implements AccountService {
 			return "accountpwderror";
 		} catch (Exception e) {
 			return "error";
-		}
+		}*/
 	}
 
 	public void logout(final HttpSession session) {

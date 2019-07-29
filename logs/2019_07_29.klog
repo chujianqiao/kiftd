@@ -1,0 +1,81 @@
+TIME:
+2019年07月29日 11:10:58
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [111]
+>OPERATE [Download checked file]
+----------------
+>PATH [ROOT/b]
+>NAME [DownLoadRecord.ini]
+----------------
+
+TIME:
+2019年07月29日 11:17:58
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [111]
+>OPERATE [Upload file]
+>PATH [ROOT]
+>NAME [apache-maven-3.6.0-bin.zip]
+
+TIME:
+2019年07月29日 11:18:15
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [111]
+>OPERATE [Upload file]
+>PATH [ROOT]
+>NAME [apache-maven-3.6.0-bin (1).zip]
+
+TIME:
+2019年07月29日 11:20:12
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [111]
+>OPERATE [Delete file]
+>PATH [ROOT]
+>NAME [apache-maven-3.6.0-bin (1).zip]
+
+TIME:
+2019年07月29日 11:20:12
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [111]
+>OPERATE [Delete file]
+>PATH [ROOT]
+>NAME [apache-maven-3.6.0-bin.zip]
+
+TIME:
+2019年07月29日 11:20:36
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [111]
+>OPERATE [Upload file]
+>PATH [ROOT]
+>NAME [万寿路项目巡检报告_201904.docx]
+
+TIME:
+2019年07月29日 11:21:06
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [111]
+>OPERATE [Delete file]
+>PATH [ROOT]
+>NAME [万寿路项目巡检报告_201904.docx]
+
+TIME:
+2019年07月29日 11:25:29
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [111]
+>OPERATE [Upload file]
+>PATH [ROOT/111的文件夹]
+>NAME [TRS海贝大数据管理系统用户手册.pdf]

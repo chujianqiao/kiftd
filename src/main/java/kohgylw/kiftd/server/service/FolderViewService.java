@@ -25,6 +25,10 @@ public interface FolderViewService{
 	 * @return java.lang.String 该文件夹视图的JSON格式，原型详见kohgylw.kiftd.server.pojo.FolderView类。
 	 */
     String getFolderViewToJson(final String fid, final HttpSession session, final HttpServletRequest request);
+
+	String getMyFolderViewToJson(final String fid, final HttpSession session, final HttpServletRequest request);
+
+	String getShareFolderViewToJson(final String fid, final Integer typeid, final HttpSession session, final HttpServletRequest request);
     
     /**
      * 

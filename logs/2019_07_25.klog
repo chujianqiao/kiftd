@@ -1,0 +1,213 @@
+TIME:
+2019年07月25日 17:17:48
+TYPE:
+Exception
+CONTENT:
+[org.apache.ibatis.binding.BindingException: Invalid bound statement (not found): kohgylw.kiftd.server.mapper.UsersMapper.queryByUsername]:Invalid bound statement (not found): kohgylw.kiftd.server.mapper.UsersMapper.queryByUsername
+
+TIME:
+2019年07月25日 17:18:19
+TYPE:
+Exception
+CONTENT:
+[org.apache.ibatis.binding.BindingException: Invalid bound statement (not found): kohgylw.kiftd.server.mapper.UsersMapper.queryByUsername]:Invalid bound statement (not found): kohgylw.kiftd.server.mapper.UsersMapper.queryByUsername
+
+TIME:
+2019年07月25日 17:35:36
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Upload file]
+>PATH [ROOT/111的文件夹]
+>NAME [DownLoadRecord.ini]
+
+TIME:
+2019年07月25日 17:36:06
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Upload file]
+>PATH [ROOT/b]
+>NAME [DownLoadRecord.ini]
+
+TIME:
+2019年07月25日 17:43:19
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Upload file]
+>PATH [ROOT]
+>NAME [apache-maven-3.6.0-bin.zip]
+
+TIME:
+2019年07月25日 17:44:19
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Upload file]
+>PATH [ROOT]
+>NAME [apache-maven-3.6.0-bin (1).zip]
+
+TIME:
+2019年07月25日 17:50:56
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Delete file]
+>PATH [ROOT]
+>NAME [apache-maven-3.6.0-bin (1).zip]
+
+TIME:
+2019年07月25日 17:50:58
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Delete file]
+>PATH [ROOT]
+>NAME [apache-maven-3.6.0-bin.zip]
+
+TIME:
+2019年07月25日 17:53:12
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Upload file]
+>PATH [ROOT]
+>NAME [apache-maven-3.6.0-bin.zip]
+
+TIME:
+2019年07月25日 17:59:03
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Delete file]
+>PATH [ROOT]
+>NAME [apache-maven-3.6.0-bin.zip]
+
+TIME:
+2019年07月25日 17:59:10
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Upload file]
+>PATH [ROOT]
+>NAME [apache-maven-3.6.0-bin.zip]
+
+TIME:
+2019年07月25日 18:00:17
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Delete file]
+>PATH [ROOT]
+>NAME [apache-maven-3.6.0-bin.zip]
+
+TIME:
+2019年07月25日 18:43:39
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Upload file]
+>PATH [ROOT/b]
+>NAME [apache-maven-3.6.0-bin.zip]
+
+TIME:
+2019年07月25日 18:43:49
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Delete file]
+>PATH [ROOT/b]
+>NAME [apache-maven-3.6.0-bin.zip]
+
+TIME:
+2019年07月25日 18:44:16
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Upload file]
+>PATH [ROOT]
+>NAME [apache-maven-3.6.0-bin.zip]
+
+TIME:
+2019年07月25日 18:45:04
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Delete file]
+>PATH [ROOT]
+>NAME [apache-maven-3.6.0-bin.zip]
+
+TIME:
+2019年07月25日 18:45:23
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Upload file]
+>PATH [ROOT]
+>NAME [apache-maven-3.6.0-bin.zip]
+
+TIME:
+2019年07月25日 18:45:29
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Delete file]
+>PATH [ROOT]
+>NAME [apache-maven-3.6.0-bin.zip]
+
+TIME:
+2019年07月25日 18:45:57
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Upload file]
+>PATH [ROOT]
+>NAME [apache-maven-3.6.0-bin.zip]
+
+TIME:
+2019年07月25日 18:50:49
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Delete file]
+>PATH [ROOT]
+>NAME [apache-maven-3.6.0-bin.zip]
+
+TIME:
+2019年07月25日 18:51:28
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Upload file]
+>PATH [ROOT]
+>NAME [apache-maven-3.6.0-bin.zip]
+
+TIME:
+2019年07月25日 18:51:30
+TYPE:
+Event
+CONTENT:
+>ACCOUNT [admin]
+>OPERATE [Delete file]
+>PATH [ROOT]
+>NAME [apache-maven-3.6.0-bin.zip]

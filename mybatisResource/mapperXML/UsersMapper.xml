@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kohgylw.kiftd.server.mapper.UsersMapper">
+	<resultMap id="BaseResultMap" type="kohgylw.kiftd.server.model.Users">
+		<result column="UID" jdbcType="VARCHAR" property="UID" />
+		<result column="USERNAME" jdbcType="VARCHAR" property="USERNAME" />
+		<result column="FILESIZE" jdbcType="VARCHAR"
+			property="FILESIZE" />
+	</resultMap>
+
+	<select id="queryByUsername" parameterType="java.lang.String"
+			resultMap="BaseResultMap">
+		SELECT * FROM USERS WHERE USERNAME = #{USERNAME,jdbcType=VARCHAR}
+	</select>
+
+	<update id="updateSizeByUsername" parameterType="java.util.Map">
+		UPDATE USERS SET FILESIZE = #{FILESIZE,jdbcType=VARCHAR} WHERE USERNAME
+		= #{USERNAME,jdbcType=VARCHAR}
+	</update>
+
+
+</mapper>

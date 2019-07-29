@@ -382,13 +382,14 @@ function getServerOS() {
 }
 
 // 获取实时文件夹视图
-function showFolderView(fid,targetId) {
+function showFolderView(fid,typeid,targetId) {
 	startLoading();
 	$.ajax({
 		type : 'POST',
 		dataType : 'text',
 		data : {
-			fid : fid
+			fid : fid,
+			typeid : typeid
 		},
 		url : 'homeController/getFolderView.ajax',
 		success : function(result) {
@@ -642,9 +643,9 @@ function showAccountView(folderView) {
 		// 说明已经等陆，显示注销按钮
 		$("#tb")
 				.append(
-						"<button class='btn btn-link rightbtn' data-toggle='modal' data-target='#logoutModal'>注销 ["
+						"<button class='btn btn-link rightbtn' data-toggle='modal' data-target='#logoutModal'><!--注销--> ["
 								+ folderView.account
-								+ "] <span class='glyphicon glyphicon-off' aria-hidden='true'></span></button>");
+								+ "][" + folderView.users.FILESIZE + "M/" + folderView.users.MAXSIZE + "M]<!--<span class='glyphicon glyphicon-off' aria-hidden='true'></span>--></button>");
 		$("#tb2")
 				.append(
 						"<button class='btn btn-link' data-toggle='modal' data-target='#logoutModal'>注销 ["
@@ -772,7 +773,18 @@ function showFolderTable(folderView) {
 								+ f.folderName + "</button></td><td class='hiddenColumn'>"
 								+ f.folderCreationDate + "</td><td>--</td><td class='hiddenColumn'>"
 								+ f.folderCreator + "</td><td>";
+						if (f.folderConstraint == 1){
+							folderRow = folderRow
+								+ "仅自己</td><td>";
+						}else if (f.folderConstraint == 0) {
+							folderRow = folderRow
+								+ "公开</td><td>";
+						}else {
+							folderRow = folderRow
+								+ "未知</td><td>";
+						}
 						if (aD) {
+							if (folderView.account == "admin" || folderView.account == f.folderCreator) {
 							folderRow = folderRow
 									+ "<button onclick='showDeleteFolderModel("
 									+ '"'
@@ -781,9 +793,11 @@ function showFolderTable(folderView) {
 									+ f.folderName
 									+ '"'
 									+ ")' class='btn btn-link btn-xs'><span class='glyphicon glyphicon-remove'></span> 删除</button>";
+							}
 						}
 						if (aR) {
-							folderRow = folderRow
+							if (folderView.account == "admin" || folderView.account == f.folderCreator) {
+								folderRow = folderRow
 									+ "<button onclick='showRenameFolderModel("
 									+ '"'
 									+ f.folderId
@@ -792,6 +806,7 @@ function showFolderTable(folderView) {
 									+ '",'
 									+ f.folderConstraint
 									+ ")' class='btn btn-link btn-xs'><span class='glyphicon glyphicon-wrench'></span> 编辑</button>";
+							}
 						}
 						if (aO) {
 							folderRow = folderRow
@@ -901,7 +916,8 @@ function showFolderTable(folderView) {
 							}
 						}
 						if (aD) {
-							fileRow = fileRow
+							if (folderView.account == "admin" || folderView.account == fi.folderCreator) {
+								fileRow = fileRow
 									+ "<button onclick='showDeleteFileModel("
 									+ '"'
 									+ fi.fileId
@@ -909,9 +925,11 @@ function showFolderTable(folderView) {
 									+ fi.fileName
 									+ '"'
 									+ ")' class='btn btn-link btn-xs'><span class='glyphicon glyphicon-remove'></span> 删除</button>";
+							}
 						}
 						if (aR) {
-							fileRow = fileRow
+							if (folderView.account == "admin" || folderView.account == fi.folderCreator) {
+								fileRow = fileRow
 									+ "<button onclick='showRenameFileModel("
 									+ '"'
 									+ fi.fileId
@@ -921,6 +939,7 @@ function showFolderTable(folderView) {
 									+ fi.fileName
 									+ '"'
 									+ ")' class='btn btn-link btn-xs'><span class='glyphicon glyphicon-wrench'></span> 重命名</button>";
+							}
 						}
 						if (aO) {
 							fileRow = fileRow
@@ -941,7 +960,7 @@ function showFolderTable(folderView) {
 	changeFilesTableStyle();
 }
 
-var folderTypes=['公开的','仅小组','仅创建者'];// 文件夹约束条件（由小至大）
+var folderTypes=['公开的','仅创建者'];// 文件夹约束条件（由小至大）
 
 // 显示新建文件夹模态框
 function showNewFolderModel() {
@@ -1390,6 +1409,10 @@ function doupload(count) {
 					showUploadFileAlert("提示：出现意外错误，文件：[" + fname
 							+ "]上传失败，上传被中断。");
 					$("#uls_" + count).text("[失败]");
+				} else if (result == "uploadsizeerror") {
+					showUploadFileAlert("提示：出现意外错误，文件：[" + fname
+						+ "]上传失败，上传空间不足。");
+					$("#uls_" + count).text("[失败]");uploadsizeerror
 				} else {
 					showUploadFileAlert("提示：出现意外错误，文件：[" + fname
 							+ "]上传失败，上传被中断。");

@@ -1,11 +1,16 @@
 package kohgylw.kiftd.server.filter;
 
+import javax.annotation.Resource;
 import javax.servlet.annotation.*;
 import javax.servlet.*;
+
+import kohgylw.kiftd.server.mapper.UsersMapper;
+import kohgylw.kiftd.server.model.Users;
 import kohgylw.kiftd.server.util.*;
 import javax.servlet.http.*;
 
 import org.springframework.core.annotation.Order;
+import org.springframework.util.StringUtils;
 
 import java.io.*;
 
@@ -13,17 +18,32 @@ import java.io.*;
 @Order(1)
 public class MastLoginFilter implements Filter
 {
+    @Resource
+    private UsersMapper um;
     public void init(final FilterConfig filterConfig) throws ServletException {
     }
     
     public void doFilter(final ServletRequest request, final ServletResponse response, final FilterChain chain) throws IOException, ServletException {
+        String username = request.getParameter("username");
+
+        Users users = new Users();
         final ConfigureReader cr = ConfigureReader.instance();
         final boolean s = cr.mustLogin();
         final HttpServletRequest hsq = (HttpServletRequest)request;
         final HttpServletResponse hsr = (HttpServletResponse)response;
         final String url = hsq.getServletPath();
         final HttpSession session = hsq.getSession();
-        if(url.startsWith("/externalLinksController/") || url.startsWith("//externalLinksController/") || url.startsWith("/homeController/getNewVerCode.do") || url.startsWith("//homeController/getNewVerCode.do")) {
+
+        if (!StringUtils.isEmpty(username)){
+            users = um.queryByUsername(username);
+            if (users != null){
+                session.setAttribute("users",users);
+            }
+            session.setAttribute("ACCOUNT",username);
+            session.removeAttribute("sharetypeid");
+        }
+
+        if(url.startsWith("/externalLinksController/") || url.startsWith("//externalLinksController/") || url.startsWith("/homeController/getNewVerCode.do") || url.startsWith("//homeController/getNewVerCode.do") || url.startsWith("/homeController/doLogout.ajax")) {
         		chain.doFilter(request, response);//对于外部链接控制器和验证码的请求直接放行。
         		return;
         }

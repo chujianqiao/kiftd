@@ -64,8 +64,22 @@ public class HomeController {
 
 	@RequestMapping(value = { "/getFolderView.ajax" }, produces = { CHARSET_BY_AJAX })
 	@ResponseBody
-	public String getFolderView(final String fid, final HttpSession session, final HttpServletRequest request) {
-		return fvs.getFolderViewToJson(fid, session, request);
+	public String getFolderView(final String fid, Integer typeid, final HttpSession session, final HttpServletRequest request) {
+		Integer sessionId = (Integer) session.getAttribute("sharetypeid");
+		if (typeid != null){
+			session.setAttribute("sharetypeid",typeid);
+		}else {
+			if (sessionId != null){
+				typeid = sessionId;
+			}else {
+				typeid = 1;
+				session.setAttribute("sharetypeid",typeid);
+			}
+		}
+
+
+		return fvs.getShareFolderViewToJson(fid, typeid, session, request);
+
 	}
 
 	@RequestMapping({ "/doLogout.ajax" })
