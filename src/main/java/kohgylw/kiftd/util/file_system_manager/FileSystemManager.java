@@ -76,13 +76,13 @@ public class FileSystemManager {
 			selectNodeByFolderId = c.prepareStatement("SELECT * FROM FILE WHERE file_parent_folder = ?");
 			selectFoldersByParentFolderId = c.prepareStatement("SELECT * FROM FOLDER WHERE folder_parent = ?");
 			insertNode = c.prepareStatement("INSERT INTO FILE VALUES(?,?,?,?,?,?,?)");
-			insertFolder = c.prepareStatement("INSERT INTO FOLDER VALUES(?,?,?,?,?,?)");
+			insertFolder = c.prepareStatement("INSERT INTO FOLDER VALUES(?,?,?,?,?,?,?)");
 			deleteNodeById = c.prepareStatement("DELETE FROM FILE WHERE file_id = ?");
 			deleteFolderById = c.prepareStatement("DELETE FROM FOLDER WHERE folder_id = ?");
 			updateNodeById = c.prepareStatement(
 					"UPDATE FILE SET file_name = ? , file_size = ? , file_parent_folder = ? , file_creation_date = ? , file_creator = ? , file_path = ? WHERE file_id = ?");
 			updateFolderById = c.prepareStatement(
-					"UPDATE FOLDER SET folder_name= ? , folder_creation_date = ? , folder_creator = ? , folder_parent = ? , folder_constraint = ? WHERE folder_id = ?");
+					"UPDATE FOLDER SET folder_name= ? , folder_creation_date = ? , folder_creator = ? , folder_parent = ? , folder_constraint = ? , folder_size = ? WHERE folder_id = ?");
 		} catch (SQLException e) {
 			Printer.instance.print("错误：出现未知错误，文件系统解析失败，无法浏览文件。");
 		}
@@ -391,6 +391,7 @@ public class FileSystemManager {
 		folder.setFolderCreationDate(r.getString("folder_creation_date"));
 		folder.setFolderCreator(r.getString("folder_creator"));
 		folder.setFolderConstraint(r.getInt("folder_constraint"));
+		folder.setFolderSize(r.getString("folder_size"));
 		return folder;
 	}
 

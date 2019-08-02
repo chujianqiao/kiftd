@@ -504,6 +504,7 @@ public class ConfigureReader {
 		if ("true".equals(serverp.getProperty("mysql.enable"))) {
 			dbDriver = "com.mysql.cj.jdbc.Driver";
 			String url = serverp.getProperty("mysql.url", "127.0.0.1/kift");
+			//String url = serverp.getProperty("mysql.url", "192.168.1.15/kift");
 			if (url.indexOf("/") <= 0 || url.substring(url.indexOf("/")).length() == 1) {
 				Printer.instance.print("错误：自定义数据库的URL中必须指定数据库名称。");
 				return 8;
@@ -583,6 +584,8 @@ public class ConfigureReader {
 			dsp.setProperty("mysql.enable", "false");
 			dsp.setProperty("mysql.url",
 					serverp == null ? "127.0.0.1/kift" : serverp.getProperty("mysql.url", "127.0.0.1/kift"));
+			//dsp.setProperty("mysql.url",
+					//serverp == null ? "192.168.1.15/kift" : serverp.getProperty("mysql.url", "192.168.1.15/kift"));
 			dsp.setProperty("mysql.user", dbUser == null ? "root" : dbUser);
 			dsp.setProperty("mysql.password", dbPwd == null ? "" : dbPwd);
 			dsp.setProperty("mysql.timezone", timeZone == null ? "GMT%2B8" : timeZone);

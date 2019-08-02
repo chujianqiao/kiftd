@@ -19,6 +19,12 @@
 		#{pfid,jdbcType=VARCHAR}
 	</select>
 
+	<select id="queryByParentFolderIdAndAccount" parameterType="java.lang.String"
+			resultMap="BaseResultMap">
+		SELECT * FROM FILE WHERE file_parent_folder =
+		#{pfid,jdbcType=VARCHAR} AND file_creator = #{account,jdbcType=VARCHAR}
+	</select>
+
 	<insert id="insert" parameterType="kohgylw.kiftd.server.model.Node">
 		INSERT INTO FILE
 		VALUES(#{fileId,jdbcType=VARCHAR},#{fileName,jdbcType=VARCHAR},#{fileSize,jdbcType=VARCHAR},#{fileParentFolder,jdbcType=VARCHAR},#{fileCreationDate,jdbcType=VARCHAR},#{fileCreator,jdbcType=VARCHAR},#{filePath,jdbcType=VARCHAR})

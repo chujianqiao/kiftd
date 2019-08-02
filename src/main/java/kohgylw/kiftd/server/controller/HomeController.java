@@ -68,6 +68,9 @@ public class HomeController {
 		Integer sessionId = (Integer) session.getAttribute("sharetypeid");
 		if (typeid != null){
 			session.setAttribute("sharetypeid",typeid);
+			if (typeid == 2){
+				return fvs.getShareFolderViewToJson(fid, typeid, session, request);
+			}
 		}else {
 			if (sessionId != null){
 				typeid = sessionId;

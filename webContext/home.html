@@ -34,7 +34,7 @@
 			<div class="col-md-12">
 				<div class="titlebox">
 					<span class="titletext"> <!-- 主标题，如需修改请替换后方标签内的文字 --> <em>
-							网盘系统 <small> <!-- 副标题，如需修改请替换后方标签内的文字 --> <span
+							信息检索和数据管理系统——网盘系统 <small> <!-- 副标题，如需修改请替换后方标签内的文字 --> <span
 								class="graytext"></span>
 						</small>
 					</em>
@@ -86,9 +86,10 @@
 								</form>
 								<a id="myFiles" href="javascript:0;" onclick="showFolderView('root','1','0')"
 								   data-toggle="modal" class="navbar-text">我的文件</a>
-									<a id="shareFiles" href="javascript:0;" onclick="showFolderView('root','0','0')"
-									   data-toggle="modal" class="navbar-text">共享文件</a>
-
+								<a id="shareFiles" href="javascript:0;" onclick="showFolderView('root','0','0')"
+								   data-toggle="modal" class="navbar-text">共享文件</a>
+								<a id="allFiles" href="javascript:0;" onclick="showFolderView('root','2','0')"
+								   data-toggle="modal" class="navbar-text" style="display: none">全部文件</a>
 								<ul class="nav navbar-nav navbar-right">
 									<li id="packageDownloadBox"></li>
 									<li class="dropdown" id="operationMenuBox"
@@ -106,10 +107,10 @@
 													class="pull-right"><span
 														class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>+U</span></a></li>
 											<li role="separator" class="divider"></li>
-											<li id="cutFileButtonLi"><a><span id='cutSignTx'>剪切
+											<!--<li id="cutFileButtonLi"><a><span id='cutSignTx'>剪切
 														<span class="pull-right"><span
 															class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>+C</span>
-												</span></a></li>
+												</span></a></li>-->
 											<li id="deleteSeelectFileButtonLi"><a>删除 <span
 													class="pull-right"><span
 														class="glyphicon glyphicon-arrow-up" aria-hidden="true"></span>+D</span></a></li>

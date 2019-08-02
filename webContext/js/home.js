@@ -641,14 +641,27 @@ function showAccountView(folderView) {
 	account=folderView.account;
 	if (folderView.account != null) {
 		// 说明已经等陆，显示注销按钮
-		$("#tb")
+		if (folderView.users.FILESIZE > 1024){
+			$("#tb")
 				.append(
-						"<button class='btn btn-link rightbtn' data-toggle='modal' data-target='#logoutModal'><!--注销--> ["
-								+ folderView.account
-								+ "][" + folderView.users.FILESIZE + "M/" + folderView.users.MAXSIZE + "M]<!--<span class='glyphicon glyphicon-off' aria-hidden='true'></span>--></button>");
+					"<button class='btn btn-link rightbtn' data-toggle='modal'> <!--data-target='#logoutModal'--><!--注销--> ["
+					+ folderView.account
+					+ "]&nbsp&nbsp&nbsp&nbsp空间容量(" + (folderView.users.FILESIZE/1024).toFixed(2) + "G/" + folderView.users.MAXSIZE/1024 + "G)<!--<span class='glyphicon glyphicon-off' aria-hidden='true'></span>--></button>");
+		} else {
+			$("#tb")
+				.append(
+					"<button class='btn btn-link rightbtn' data-toggle='modal'> <!--data-target='#logoutModal'--><!--注销--> ["
+					+ folderView.account
+					+ "]&nbsp&nbsp&nbsp&nbsp空间容量(" + folderView.users.FILESIZE + "M/" + folderView.users.MAXSIZE/1024 + "G)<!--<span class='glyphicon glyphicon-off' aria-hidden='true'></span>--></button>");
+		}
+
+		if (folderView.account == "admin") {
+			$("#allFiles").show();
+		}
+
 		$("#tb2")
 				.append(
-						"<button class='btn btn-link' data-toggle='modal' data-target='#logoutModal'>注销 ["
+						"<button class='btn btn-link' data-toggle='modal'> <!--data-target='#logoutModal'--><!--注销--> ["
 								+ folderView.account
 								+ "] <span class='glyphicon glyphicon-off' aria-hidden='true'></span></button>");
 	} else {
@@ -771,8 +784,21 @@ function showFolderTable(folderView) {
 								+ '"' + f.folderId + '"'
 								+ ")' class='btn btn-link btn-xs'>/"
 								+ f.folderName + "</button></td><td class='hiddenColumn'>"
-								+ f.folderCreationDate + "</td><td>--</td><td class='hiddenColumn'>"
+								+ f.folderCreationDate + "</td><td>";
+								/*"--</td><td class='hiddenColumn'>"
+								+ f.folderCreator + "</td><td>";*/
+						if (f.folderSize != 0 ){
+							if (f.folderSize > 1024){
+								folderRow = folderRow + (f.folderSize/1024).toFixed(2) + "G</td><td class='hiddenColumn'>"
+									+ f.folderCreator + "</td><td>";
+							} else {
+								folderRow = folderRow + f.folderSize + "MB</td><td class='hiddenColumn'>"
+									+ f.folderCreator + "</td><td>";
+							}
+						} else {
+							folderRow = folderRow + "--</td><td class='hiddenColumn'>"
 								+ f.folderCreator + "</td><td>";
+						}
 						if (f.folderConstraint == 1){
 							folderRow = folderRow
 								+ "仅自己</td><td>";
@@ -836,9 +862,15 @@ function showFolderTable(folderView) {
 						if(fi.fileSize=="0"){
 							fileRow=fileRow+"<td>&lt;1MB</td>";
 						}else{
-							fileRow=fileRow+"<td>" + fi.fileSize + "MB</td>";
+							if (fi.fileSize > 1024){
+								fileRow=fileRow+"<td>" + (fi.fileSize/1024).toFixed(2) + "G</td>";
+							}else {
+								fileRow=fileRow+"<td>" + fi.fileSize + "MB</td>";
+							}
+
 						}
 						fileRow=fileRow +"<td class='hiddenColumn'>" + fi.fileCreator + "</td><td>";
+						fileRow=fileRow +"--</td><td>";
 						if (aL) {
 							fileRow = fileRow
 									+ "<button onclick='showDownloadModel("
@@ -916,7 +948,7 @@ function showFolderTable(folderView) {
 							}
 						}
 						if (aD) {
-							if (folderView.account == "admin" || folderView.account == fi.folderCreator) {
+							if (folderView.account == "admin" || folderView.account == fi.fileCreator) {
 								fileRow = fileRow
 									+ "<button onclick='showDeleteFileModel("
 									+ '"'
@@ -928,7 +960,7 @@ function showFolderTable(folderView) {
 							}
 						}
 						if (aR) {
-							if (folderView.account == "admin" || folderView.account == fi.folderCreator) {
+							if (folderView.account == "admin" || folderView.account == fi.fileCreator) {
 								fileRow = fileRow
 									+ "<button onclick='showRenameFileModel("
 									+ '"'
@@ -1002,6 +1034,8 @@ function createfolder() {
 				} else {
 					if (result == "noAuthorized") {
 						showFolderAlert("提示：您的操作未被授权，创建文件夹失败。");
+					} else if (result == "errorCreator") {
+						showFolderAlert("提示：禁止在不属于自己的文件夹下创建文件夹。");
 					} else if (result == "errorParameter") {
 						showFolderAlert("提示：参数不正确，创建文件夹失败。");
 					} else if (result == "cannotCreateFolder") {
@@ -1412,7 +1446,11 @@ function doupload(count) {
 				} else if (result == "uploadsizeerror") {
 					showUploadFileAlert("提示：出现意外错误，文件：[" + fname
 						+ "]上传失败，上传空间不足。");
-					$("#uls_" + count).text("[失败]");uploadsizeerror
+					$("#uls_" + count).text("[失败]");
+				} else if (result == "uploadcreatorerror") {
+					showUploadFileAlert("提示：出现意外错误，文件：[" + fname
+						+ "]上传失败，禁止在不属于自己的文件夹下上传文件。");
+					$("#uls_" + count).text("[失败]");
 				} else {
 					showUploadFileAlert("提示：出现意外错误，文件：[" + fname
 							+ "]上传失败，上传被中断。");
@@ -1964,6 +2002,9 @@ function deleteAllChecked() {
 			} else {
 				if (result == "noAuthorized") {
 					$('#deleteFileMessage').text("提示：您的操作未被授权，删除失败");
+					$("#dfmbutton").attr('disabled', false);
+				} else if (result == "creatorDeleteFile") {
+					$('#deleteFileMessage').text("提示：所选择的包含不属于自己的文件或文件夹，不能执行删除");
 					$("#dfmbutton").attr('disabled', false);
 				} else if (result == "errorParameter") {
 					$('#deleteFileMessage').text("提示：参数不正确，未能全部删除文件");

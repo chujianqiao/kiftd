@@ -9,6 +9,7 @@
 		<result column="folder_creator" jdbcType="VARCHAR" property="folderCreator" />
 		<result column="folder_parent" jdbcType="VARCHAR" property="folderParent" />
 		<result column="folder_constraint" jdbcType="INTEGER" property="folderConstraint" />
+		<result column="folder_size" jdbcType="VARCHAR" property="folderSize" />
 	</resultMap>
 
 	<select id="queryById" parameterType="java.lang.String"
@@ -38,7 +39,7 @@
 
 	<insert id="insertNewFolder" parameterType="kohgylw.kiftd.server.model.Folder">
 		INSERT INTO FOLDER
-		VALUES(#{folderId,jdbcType=VARCHAR},#{folderName,jdbcType=VARCHAR},#{folderCreationDate,jdbcType=VARCHAR},#{folderCreator,jdbcType=VARCHAR},#{folderParent,jdbcType=VARCHAR},#{folderConstraint,jdbcType=INTEGER});
+		VALUES(#{folderId,jdbcType=VARCHAR},#{folderName,jdbcType=VARCHAR},#{folderCreationDate,jdbcType=VARCHAR},#{folderCreator,jdbcType=VARCHAR},#{folderParent,jdbcType=VARCHAR},#{folderConstraint,jdbcType=INTEGER},#{folderSize,jdbcType=INTEGER});
 	</insert>
 
 	<delete id="deleteById" parameterType="java.lang.String">
@@ -47,6 +48,11 @@
 
 	<update id="updateFolderNameById" parameterType="java.util.Map">
 		UPDATE FOLDER SET folder_name = #{newName,jdbcType=VARCHAR} WHERE folder_id
+		= #{folderId,jdbcType=VARCHAR}
+	</update>
+
+	<update id="updateFolderSizeById" parameterType="java.util.Map">
+		UPDATE FOLDER SET folder_size = #{folderSize,jdbcType=VARCHAR} WHERE folder_id
 		= #{folderId,jdbcType=VARCHAR}
 	</update>
 

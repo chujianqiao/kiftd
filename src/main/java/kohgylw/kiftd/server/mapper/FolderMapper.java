@@ -22,6 +22,8 @@ public interface FolderMapper
     int deleteById(final String folderId);
     
     int updateFolderNameById(final Map<String, String> map);
+
+    int updateFolderSizeById(@Param("folderSize")final String folderSize, @Param("folderId")final String folderId);
     
     int updateFolderConstraintById(final Map<String, Object> map);
 

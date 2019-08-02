@@ -144,10 +144,10 @@ public class FolderViewServiceImpl implements FolderViewService {
 			return "NOT_FOUND";//如果用户请求一个不存在的文件夹，则返回“NOT_FOUND”，令页面回到ROOT视图
 		}
 		final String account = (String) session.getAttribute("ACCOUNT");
-		// 检查访问文件夹视图请求是否合法
-		if (!ConfigureReader.instance().accessFolder(vf, account)) {
-			return "notAccess";// 如无访问权限则直接返回该字段，令页面回到ROOT视图。
-		}
+		// 检查访问文件夹视图请求是否合法 TODO 现在私有的不显示 只有admin可以看见 所以这个没有用了
+		//if (!ConfigureReader.instance().accessFolder(vf, account)) {
+			//return "notAccess";// 如无访问权限则直接返回该字段，令页面回到ROOT视图。
+		//}
 		final FolderView fv = new FolderView();
 		fv.setFolder(vf);
 		fv.setParentList(this.fu.getParentList(fid));
@@ -157,6 +157,12 @@ public class FolderViewServiceImpl implements FolderViewService {
 				if (ConfigureReader.instance().accessFolder(f, account)) {
 					fs.add(f);
 				}
+			}
+		}else if (typeid == 2){
+			for (Folder f : this.fm.queryByParentId(fid)) {
+				//if (ConfigureReader.instance().accessFolder(f, account)) {
+					fs.add(f);
+				//}
 			}
 		}else {
 			for (Folder f : this.fm.queryByParentIdNOShare(fid, typeid)) {
@@ -168,7 +174,24 @@ public class FolderViewServiceImpl implements FolderViewService {
 
 		fv.setFolderList(fs);
 		fv.setUsers((Users) session.getAttribute("users"));
-		fv.setFileList(this.flm.queryByParentFolderId(fid));
+
+		// TODO
+		Folder folder = fm.queryById(fid);
+		if (folder.getFolderName().equals("ROOT")){
+			if (typeid == 1){//我的文件，显示我自己的
+				fv.setFileList(this.flm.queryByParentFolderIdAndAccount(fid, account));
+			} else if (typeid == 0){//共享文件，不显示
+				//fv.setFileList(this.flm.queryByParentFolderId(fid));
+			} else {//全部文件，全显示
+				fv.setFileList(this.flm.queryByParentFolderId(fid));
+			}
+		} else {
+			fv.setFileList(this.flm.queryByParentFolderId(fid));
+		}
+
+		//fv.setFileList(this.flm.queryByParentFolderId(fid));
+
+
 		if (account != null) {
 			fv.setAccount(account);
 		}

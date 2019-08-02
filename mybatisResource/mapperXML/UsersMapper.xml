@@ -4,8 +4,8 @@
 	<resultMap id="BaseResultMap" type="kohgylw.kiftd.server.model.Users">
 		<result column="UID" jdbcType="VARCHAR" property="UID" />
 		<result column="USERNAME" jdbcType="VARCHAR" property="USERNAME" />
-		<result column="FILESIZE" jdbcType="VARCHAR"
-			property="FILESIZE" />
+		<result column="FILESIZE" jdbcType="VARCHAR" property="FILESIZE" />
+		<result column="MAXSIZE" jdbcType="VARCHAR" property="MAXSIZE" />
 	</resultMap>
 
 	<select id="queryByUsername" parameterType="java.lang.String"

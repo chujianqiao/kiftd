@@ -1,11 +1,15 @@
 package kohgylw.kiftd.server.mapper;
 
 import kohgylw.kiftd.server.model.*;
+import org.apache.ibatis.annotations.Param;
+
 import java.util.*;
 
 public interface NodeMapper
 {
     List<Node> queryByParentFolderId(final String pfid);
+
+    List<Node> queryByParentFolderIdAndAccount(@Param("pfid")final String pfid, @Param("account")final String account);
     
     int insert(final Node f);
     

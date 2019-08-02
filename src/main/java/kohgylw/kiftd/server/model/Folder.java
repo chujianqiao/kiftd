@@ -8,6 +8,7 @@ public class Folder
     private String folderCreator;
     private String folderParent;
     private int folderConstraint;
+    private String folderSize;
     
     public String getFolderId() {
         return this.folderId;
@@ -56,4 +57,12 @@ public class Folder
 	public void setFolderConstraint(int folderConstraint) {
 		this.folderConstraint = folderConstraint;
 	}
+
+    public String getFolderSize() {
+        return folderSize;
+    }
+
+    public void setFolderSize(String folderSize) {
+        this.folderSize = folderSize;
+    }
 }

@@ -19,6 +19,8 @@ public class FolderServiceImpl implements FolderService {
 	@Resource
 	private FolderUtil fu;
 	@Resource
+	private UsersMapper um;
+	@Resource
 	private LogUtil lu;
 
 	public String newFolder(final HttpServletRequest request) {
@@ -26,6 +28,15 @@ public class FolderServiceImpl implements FolderService {
 		final String folderName = request.getParameter("folderName");
 		final String folderConstraint = request.getParameter("folderConstraint");
 		final String account = (String) request.getSession().getAttribute("ACCOUNT");
+
+		Folder folder = fm.queryById(parentId);
+		if (!folder.getFolderName().equals("ROOT")){
+			if (!folder.getFolderCreator().equals(account)){
+				return "errorCreator";
+			}
+		}
+
+
 		if (!ConfigureReader.instance().authorized(account, AccountAuth.CREATE_NEW_FOLDER)) {
 			return "noAuthorized";
 		}
@@ -66,6 +77,7 @@ public class FolderServiceImpl implements FolderService {
 		f.setFolderId(UUID.randomUUID().toString());
 		f.setFolderName(folderName);
 		f.setFolderCreationDate(ServerTimeUtil.accurateToDay());
+		f.setFolderSize("0");
 		if (account != null) {
 			f.setFolderCreator(account);
 		} else {
@@ -95,18 +107,35 @@ public class FolderServiceImpl implements FolderService {
 	public String deleteFolder(final HttpServletRequest request) {
 		final String folderId = request.getParameter("folderId");
 		final String account = (String) request.getSession().getAttribute("ACCOUNT");
+		Users users = (Users) request.getSession().getAttribute("users");
 		if (!ConfigureReader.instance().authorized(account, AccountAuth.DELETE_FILE_OR_FOLDER)) {
 			return "noAuthorized";
 		}
 		if (folderId == null || folderId.length() <= 0) {
 			return "errorParameter";
 		}
-		final Folder folder = this.fm.queryById(folderId);
+		Folder folder = this.fm.queryById(folderId);
 		if (folder == null) {
 			return "deleteFolderSuccess";
 		}
 		final List<Folder> l = this.fu.getParentList(folderId);
-		if (this.fu.deleteAllChildFolder(folderId) > 0) {
+		String fileSize = Integer.parseInt(users.getFILESIZE()) - Integer.parseInt(folder.getFolderSize()) + "";
+		String folderSize = folder.getFolderSize();
+		if (this.fu.deleteAllChildFolder(folderId) > 0 && um.updateSizeByUsername(fileSize, users.getUSERNAME()) > 0) {
+			//TODO 删除文件夹后 向上遍历修改文件夹的大小
+			boolean ifParent = true;
+						/*if (folder.getFolderParent() == null || folder.getFolderParent() == "null"){
+							ifParent = false;
+						}*/
+			while (ifParent){
+				if (folder.getFolderId().equals("root")){
+					ifParent = false;
+				}
+				String parentSize = Integer.parseInt(folder.getFolderSize()) - Integer.parseInt(folderSize) + "";
+				fm.updateFolderSizeById(parentSize, folder.getFolderId());
+				folder = fm.queryById(folder.getFolderParent());
+			}
+			users.setFILESIZE(fileSize);
 			this.lu.writeDeleteFolderEvent(request, folder, l);
 			return "deleteFolderSuccess";
 		}
