@@ -644,13 +644,13 @@ function showAccountView(folderView) {
 		if (folderView.users.FILESIZE > 1024){
 			$("#tb")
 				.append(
-					"<button class='btn btn-link rightbtn' data-toggle='modal'> <!--data-target='#logoutModal'--><!--注销--> ["
+					"<button class='btn btn-link rightbtn' data-toggle='modal' data-target='#logoutModal'> <!--注销--> ["
 					+ folderView.account
 					+ "]&nbsp&nbsp&nbsp&nbsp空间容量(" + (folderView.users.FILESIZE/1024).toFixed(2) + "G/" + folderView.users.MAXSIZE/1024 + "G)<!--<span class='glyphicon glyphicon-off' aria-hidden='true'></span>--></button>");
 		} else {
 			$("#tb")
 				.append(
-					"<button class='btn btn-link rightbtn' data-toggle='modal'> <!--data-target='#logoutModal'--><!--注销--> ["
+					"<button class='btn btn-link rightbtn' data-toggle='modal' data-target='#logoutModal'><!--注销--> ["
 					+ folderView.account
 					+ "]&nbsp&nbsp&nbsp&nbsp空间容量(" + folderView.users.FILESIZE + "M/" + folderView.users.MAXSIZE/1024 + "G)<!--<span class='glyphicon glyphicon-off' aria-hidden='true'></span>--></button>");
 		}

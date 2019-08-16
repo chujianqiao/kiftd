@@ -318,6 +318,12 @@ public class FileServiceImpl extends RangeFileStreamWriter implements FileServic
 		Users users = (Users) request.getSession().getAttribute("users");
 		final String fileId = request.getParameter("fileId");
 		final String account = (String) request.getSession().getAttribute("ACCOUNT");
+
+		Users users1 = new Users();
+		String fileSize = "";
+		String realUserName = "";
+		String realFileSize = "";
+
 		if (!ConfigureReader.instance().authorized(account, AccountAuth.DELETE_FILE_OR_FOLDER)) {
 			return NO_AUTHORIZED;
 		}
@@ -334,9 +340,21 @@ public class FileServiceImpl extends RangeFileStreamWriter implements FileServic
 			return "cannotDeleteFile";
 		}
 		// 从节点删除
-		String fileSize = Integer.parseInt(users.getFILESIZE()) - Integer.parseInt(file.getFileSize()) + "";
 
-		if (this.fm.deleteById(fileId) > 0 && um.updateSizeByUsername(fileSize, users.getUSERNAME()) > 0) {
+		//TODO 用户是admin时可能删除别人的文件，这样就要减别人的空间
+		if (!file.getFileCreator().equals(account)){
+			users1 = um.queryByUsername(file.getFileCreator());
+			fileSize = Integer.parseInt(users1.getFILESIZE()) - Integer.parseInt(file.getFileSize()) + "";
+			realUserName = users1.getUSERNAME();
+			realFileSize = users.getFILESIZE();
+		} else {
+			fileSize = Integer.parseInt(users.getFILESIZE()) - Integer.parseInt(file.getFileSize()) + "";
+			realUserName = users.getUSERNAME();
+			realFileSize = fileSize;
+		}
+		//String fileSize = Integer.parseInt(users.getFILESIZE()) - Integer.parseInt(file.getFileSize()) + "";
+
+		if (this.fm.deleteById(fileId) > 0 && um.updateSizeByUsername(fileSize, realUserName) > 0) {
 
 			//TODO 删除文件后 向上遍历文件夹修改文件夹大小
 			Folder folder = flm.queryById(file.getFileParentFolder());
@@ -354,7 +372,7 @@ public class FileServiceImpl extends RangeFileStreamWriter implements FileServic
 			}
 
 			this.lu.writeDeleteFileEvent(request, file);
-			users.setFILESIZE(fileSize);
+			users.setFILESIZE(realFileSize);
 			return "deleteFileSuccess";
 		}
 		return "cannotDeleteFile";
@@ -434,6 +452,12 @@ public class FileServiceImpl extends RangeFileStreamWriter implements FileServic
 		final String strFidList = request.getParameter("strFidList");
 		final String account = (String) request.getSession().getAttribute("ACCOUNT");
 		Users users = (Users) request.getSession().getAttribute("users");
+
+		Users users1 = new Users();
+		String fileSize = "";
+		String realUserName = "";
+		String realFileSize = "";
+
 		// 权限检查
 		if (ConfigureReader.instance().authorized(account, AccountAuth.DELETE_FILE_OR_FOLDER)) {
 			try {
@@ -462,9 +486,21 @@ public class FileServiceImpl extends RangeFileStreamWriter implements FileServic
 					if (!this.fbu.deleteFromFileBlocks(file)) {
 						return "cannotDeleteFile";
 					}
+
+					//TODO 用户是admin时可能删除别人的文件，这样就要减别人的空间
 					// 删除文件节点
-					String fileSize = Integer.parseInt(users.getFILESIZE()) - Integer.parseInt(file.getFileSize()) + "";
-					if (this.fm.deleteById(fileId) <= 0 || um.updateSizeByUsername(fileSize, users.getUSERNAME()) <= 0) {
+					if (!file.getFileCreator().equals(account)){
+						users1 = um.queryByUsername(file.getFileCreator());
+						fileSize = Integer.parseInt(users1.getFILESIZE()) - Integer.parseInt(file.getFileSize()) + "";
+						realUserName = users1.getUSERNAME();
+						realFileSize = users.getFILESIZE();
+					} else {
+						fileSize = Integer.parseInt(users.getFILESIZE()) - Integer.parseInt(file.getFileSize()) + "";
+						realUserName = users.getUSERNAME();
+						realFileSize = fileSize;
+					}
+
+					if (this.fm.deleteById(fileId) <= 0 || um.updateSizeByUsername(fileSize, realUserName) <= 0) {
 						return "cannotDeleteFile";
 					}else {
 						//TODO 删除文件 向上遍历修改文件夹的大小
@@ -481,7 +517,7 @@ public class FileServiceImpl extends RangeFileStreamWriter implements FileServic
 							flm.updateFolderSizeById(parentSize, folder.getFolderId());
 							folder = flm.queryById(folder.getFolderParent());
 						}
-						users.setFILESIZE(fileSize);
+						users.setFILESIZE(realFileSize);
 					}
 					// 日志记录
 					this.lu.writeDeleteFileEvent(request, file);
@@ -502,9 +538,22 @@ public class FileServiceImpl extends RangeFileStreamWriter implements FileServic
 					Folder folder = flm.queryById(fid);
 					final List<Folder> l = this.fu.getParentList(fid);
 
-					String fileSize = Integer.parseInt(users.getFILESIZE()) - Integer.parseInt(folder.getFolderSize()) + "";
+					//TODO 用户是admin时可能删除别人的文件夹，这样就要减别人的空间
+					// 删除文件节点
+					if (!folder.getFolderCreator().equals(account)){
+						users1 = um.queryByUsername(folder.getFolderCreator());
+						fileSize = Integer.parseInt(users1.getFILESIZE()) - Integer.parseInt(folder.getFolderSize()) + "";
+						realUserName = users1.getUSERNAME();
+						realFileSize = users.getFILESIZE();
+					} else {
+						fileSize = Integer.parseInt(users.getFILESIZE()) - Integer.parseInt(folder.getFolderSize()) + "";
+						realUserName = users.getUSERNAME();
+						realFileSize = fileSize;
+					}
+
+					//fileSize = Integer.parseInt(users.getFILESIZE()) - Integer.parseInt(folder.getFolderSize()) + "";
 					String folderSize = folder.getFolderSize();
-					if (fu.deleteAllChildFolder(fid) <= 0 || um.updateSizeByUsername(fileSize, users.getUSERNAME()) <= 0) {
+					if (fu.deleteAllChildFolder(fid) <= 0 || um.updateSizeByUsername(fileSize, realUserName) <= 0) {
 						return "cannotDeleteFile";
 					} else {
 						//TODO 删除文件夹 向上遍历修改文件夹的大小
@@ -520,7 +569,7 @@ public class FileServiceImpl extends RangeFileStreamWriter implements FileServic
 							flm.updateFolderSizeById(parentSize, folder.getFolderId());
 							folder = flm.queryById(folder.getFolderParent());
 						}
-						users.setFILESIZE(fileSize);
+						users.setFILESIZE(realFileSize);
 						this.lu.writeDeleteFolderEvent(request, folder, l);
 					}
 				}

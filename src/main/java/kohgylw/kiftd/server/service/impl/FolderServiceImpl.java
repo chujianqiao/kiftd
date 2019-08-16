@@ -108,6 +108,12 @@ public class FolderServiceImpl implements FolderService {
 		final String folderId = request.getParameter("folderId");
 		final String account = (String) request.getSession().getAttribute("ACCOUNT");
 		Users users = (Users) request.getSession().getAttribute("users");
+
+		Users users1 = new Users();
+		String fileSize = "";
+		String realUserName = "";
+		String realFileSize = "";
+
 		if (!ConfigureReader.instance().authorized(account, AccountAuth.DELETE_FILE_OR_FOLDER)) {
 			return "noAuthorized";
 		}
@@ -119,9 +125,22 @@ public class FolderServiceImpl implements FolderService {
 			return "deleteFolderSuccess";
 		}
 		final List<Folder> l = this.fu.getParentList(folderId);
-		String fileSize = Integer.parseInt(users.getFILESIZE()) - Integer.parseInt(folder.getFolderSize()) + "";
+
+		//TODO 用户是admin时可能删除别人的文件，这样就要减别人的空间
+		if (!folder.getFolderCreator().equals(account)){
+			users1 = um.queryByUsername(folder.getFolderCreator());
+			fileSize = Integer.parseInt(users1.getFILESIZE()) - Integer.parseInt(folder.getFolderSize()) + "";
+			realUserName = users1.getUSERNAME();
+			realFileSize = users.getFILESIZE();
+		} else {
+			fileSize = Integer.parseInt(users.getFILESIZE()) - Integer.parseInt(folder.getFolderSize()) + "";
+			realUserName = users.getUSERNAME();
+			realFileSize = fileSize;
+		}
+
+		//fileSize = Integer.parseInt(users.getFILESIZE()) - Integer.parseInt(folder.getFolderSize()) + "";
 		String folderSize = folder.getFolderSize();
-		if (this.fu.deleteAllChildFolder(folderId) > 0 && um.updateSizeByUsername(fileSize, users.getUSERNAME()) > 0) {
+		if (this.fu.deleteAllChildFolder(folderId) > 0 && um.updateSizeByUsername(fileSize, realUserName) > 0) {
 			//TODO 删除文件夹后 向上遍历修改文件夹的大小
 			boolean ifParent = true;
 						/*if (folder.getFolderParent() == null || folder.getFolderParent() == "null"){
@@ -135,7 +154,7 @@ public class FolderServiceImpl implements FolderService {
 				fm.updateFolderSizeById(parentSize, folder.getFolderId());
 				folder = fm.queryById(folder.getFolderParent());
 			}
-			users.setFILESIZE(fileSize);
+			users.setFILESIZE(realFileSize);
 			this.lu.writeDeleteFolderEvent(request, folder, l);
 			return "deleteFolderSuccess";
 		}
